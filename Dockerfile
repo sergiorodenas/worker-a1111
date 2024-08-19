@@ -3,7 +3,7 @@ FROM alpine/git:2.36.2 as download2
 COPY builder/clone.sh /clone.sh
 
 RUN . /clone.sh sd-webui-segment-anything https://github.com/continue-revolution/sd-webui-segment-anything.git d0492ac6d586d32c04ccaeb7e720d023e60bd122 && \
-    . /clone.sh sd-webui-replacer https://github.com/light-and-ray/sd-webui-replacer.git c7f510c6917dfa93e3b2a7a441f4aecdfe6d047b && \
+    . /clone.sh sd-webui-replacer https://github.com/light-and-ray/sd-webui-replacer.git c7f510c6917dfa93e3b2a7a441f4aecdfe6d047b
 
 RUN apk add --no-cache wget && \
     wget -q -O /lazymix.safetensors https://civitai.com/api/download/models/302254 && \
