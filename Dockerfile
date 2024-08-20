@@ -24,7 +24,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --ignore-installed diskcache xformers setuptools && \
     pip install --ignore-installed -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
     
-RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
+#RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
 
 COPY config.json /stable-diffusion-webui/config.json
 COPY ui_config.json /stable-diffusion-webui/ui_config.json
