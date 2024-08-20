@@ -18,9 +18,7 @@ RUN cd stable-diffusion-webui &&  git fetch origin ${STABLE_DIFFUSION_SHA} --dep
 COPY --from=download2 /repositories /stable-diffusion-webui/repositories
 COPY --from=download2 /lazymix.safetensors /lazymix.safetensors
 
-COPY builder/requirements.txt /requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --upgrade pip && \
     pip install diskcache xformers && \
     python /stable-diffusion-webui/repositories/sd-webui-segment-anything/install.py
     
