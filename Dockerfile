@@ -21,7 +21,7 @@ COPY --from=download2 /lazymix.safetensors /lazymix.safetensors
 COPY builder/requirements.txt /requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip && \
-    pip install -r /requirements.txt && \
+    pip install diskcache xformers && \
     pip install -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
     
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
