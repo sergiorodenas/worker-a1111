@@ -19,11 +19,10 @@ COPY --from=download2 /repositories /stable-diffusion-webui/repositories
 COPY --from=download2 /lazymix.safetensors /lazymix.safetensors
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --upgrade pip && \
-    pip install diskcache xformers setuptools && \
-    pip install -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
+    pip install --ignore-installed --upgrade pip && \
+    pip install --ignore-installed diskcache xformers setuptools && \
+    pip install --ignore-installed -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
     
-RUN find / -name 'libcudart.so.11.0'
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
 
 COPY config.json /stable-diffusion-webui/config.json
