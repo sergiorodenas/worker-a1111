@@ -15,7 +15,8 @@ FROM runpod/ai-api-a1111:0.2.1
 ENV STABLE_DIFFUSION_SHA="c19d04436496ab29ddca4758a792831ae41b31de"
 RUN cd stable-diffusion-webui &&  git fetch origin ${STABLE_DIFFUSION_SHA} --depth=1 && git reset --hard ${STABLE_DIFFUSION_SHA}
 
-COPY --from=download2 /repositories /stable-diffusion-webui/repositories
+COPY --from=download2 /repositories/sd-webui-segment-anything /stable-diffusion-webui/repositories/sd-webui-segment-anything
+COPY --from=download2 /repositories/sd-webui-replacer /stable-diffusion-webui/repositories/sd-webui-replacer
 COPY --from=download2 /lazymix.safetensors /lazymix.safetensors
 
 RUN --mount=type=cache,target=/root/.cache/pip \
