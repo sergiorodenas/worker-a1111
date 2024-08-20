@@ -31,3 +31,4 @@ COPY ui_config.json /stable-diffusion-webui/ui_config.json
 
 COPY src/rp_handler.py ./rp_handler.py
 COPY src/start.sh ./start.sh
+RUN chmod +x /start.sh
