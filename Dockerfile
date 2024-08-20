@@ -23,6 +23,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install diskcache xformers setuptools && \
     pip install -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
     
+RUN find / -name 'libcudart.so.11.0'
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
 
 COPY config.json /stable-diffusion-webui/config.json
