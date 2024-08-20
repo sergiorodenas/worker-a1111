@@ -54,7 +54,7 @@ def handler(event):
 
 
 if __name__ == "__main__":
-    wait_for_service(url=f'{LOCAL_URL}/sdapi/v1/txt2img')
+    wait_for_service(url=f'{LOCAL_URL}/replacer/replace')
 
     print("WebUI API Service is ready. Starting RunPod...")
 
