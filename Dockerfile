@@ -1,30 +1,45 @@
-FROM alpine/git:2.36.2 AS download2
+FROM alpine/git:2.36.2 AS download
 
 COPY builder/clone.sh /clone.sh
 
 RUN . /clone.sh sd-webui-segment-anything https://github.com/continue-revolution/sd-webui-segment-anything.git d0492ac6d586d32c04ccaeb7e720d023e60bd122
 RUN . /clone.sh sd-webui-replacer https://github.com/light-and-ray/sd-webui-replacer.git c7f510c6917dfa93e3b2a7a441f4aecdfe6d047b
 
-RUN apk add --no-cache wget
-RUN wget -q -O /lazymix.safetensors https://civitai.com/api/download/models/302254
-RUN wget -q -O /repositories/sd-webui-segment-anything/models/sam/sam_hq_vit_l.pth https://huggingface.co/lkeab/hq-sam/resolve/main/sam_hq_vit_l.pth
-RUN wget -q -O /repositories/sd-webui-segment-anything/models/grounding-dino/groundingdino_swint_ogc.pth https://huggingface.co/ShilongLiu/GroundingDINO/resolve/main/groundingdino_swint_ogc.pth
+FROM python:3.10.9-slim
 
-FROM runpod/ai-api-a1111:0.2.1
+ENV DEBIAN_FRONTEND=noninteractive \
+    PIP_PREFER_BINARY=1 \
+    LD_PRELOAD=libtcmalloc.so \
+    ROOT=/stable-diffusion-webui \
+    PYTHONUNBUFFERED=1
 
-ENV STABLE_DIFFUSION_SHA="c19d04436496ab29ddca4758a792831ae41b31de"
-RUN cd stable-diffusion-webui &&  git fetch origin ${STABLE_DIFFUSION_SHA} --depth=1 && git reset --hard ${STABLE_DIFFUSION_SHA}
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-COPY --from=download2 /repositories/sd-webui-segment-anything /stable-diffusion-webui/repositories/sd-webui-segment-anything
-COPY --from=download2 /repositories/sd-webui-replacer /stable-diffusion-webui/repositories/sd-webui-replacer
-COPY --from=download2 /lazymix.safetensors /lazymix.safetensors
+RUN apt-get update && \
+    apt install -y \
+    fonts-dejavu-core rsync git jq moreutils aria2 wget libgoogle-perftools-dev procps && \
+    apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
+
+RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
+    pip install diskcache xformers
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --ignore-installed --upgrade pip && \
-    pip install --ignore-installed diskcache xformers setuptools && \
-    pip install --ignore-installed -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
+    cd stable-diffusion-webui && \
+    git reset --hard c19d04436496ab29ddca4758a792831ae41b31de && \
+    pip install -r requirements_versions.txt
+
+COPY --from=download /repositories /stable-diffusion-webui/repositories
+
+COPY models/sam_hq_vit_l.pth /stable-diffusion-webui/repositories/sd-webui-segment-anything/models/sam/sam_hq_vit_l.pth
+COPY models/groundingdino_swint_ogc.pth /stable-diffusion-webui/repositories/sd-webui-segment-anything/models/grounding-dino/groundingdino_swint_ogc.pth
+COPY models/lazymix.safetensors /lazymix.safetensors
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
     
-#RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
+RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
 
 COPY config.json /stable-diffusion-webui/config.json
 COPY ui_config.json /stable-diffusion-webui/ui_config.json
