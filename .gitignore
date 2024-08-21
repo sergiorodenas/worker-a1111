@@ -159,4 +159,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-models/
+models/lazymix.safetensors
+models/sam_hq_vit_l.pth
+models/groundingdino_swint_ogc.pth
