@@ -7,6 +7,7 @@ RUN . /clone.sh sd-webui-replacer https://github.com/light-and-ray/sd-webui-repl
 RUN . /clone.sh stable-diffusion-stability-ai https://github.com/Stability-AI/stablediffusion.git cf1d67a6fd5ea1aa600c4df58e5b47da45f6bdbf
 RUN . /clone.sh generative-models https://github.com/Stability-AI/generative-models.git 45c443b316737a4ab6e40413d7794a7f5657c19f
 RUN . /clone.sh k-diffusion https://github.com/crowsonkb/k-diffusion.git 045515774882014cc14c1ba2668ab5bad9cbf7c0
+RUN . /clone.sh xformers https://github.com/facebookresearch/xformers.git 184b2808a5eed5f03ce381b8e7bd73f6188d8453
 
 FROM python:3.10.9-slim
 
@@ -44,12 +45,12 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install diskcache open_clip_torch numpy==1.26.4
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --force-reinstall --no-deps --pre xformers
+#RUN --mount=type=cache,target=/root/.cache/pip \
+#    pip install --force-reinstall --no-deps --pre xformers
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 RUN cd /stable-diffusion-webui/repositories/generative-models && pip install -e .
-RUN cd /stable-diffusion-webui && source ./venv/bin/activate && python cache.py --xformers --use-cpu=all --ckpt /lazymix.safetensors
+RUN cd /stable-diffusion-webui && python cache.py --xformers --use-cpu=all --ckpt /lazymix.safetensors
 
 COPY config.json /stable-diffusion-webui/config.json
 COPY ui_config.json /stable-diffusion-webui/ui_config.json
