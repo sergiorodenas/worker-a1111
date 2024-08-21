@@ -30,7 +30,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     cd stable-diffusion-webui && \
     git reset --hard c19d04436496ab29ddca4758a792831ae41b31de && \
-    pip install -r requirements_versions.txt
+    pip install --ignore-installed -r requirements_versions.txt
 
 COPY --from=download /repositories /stable-diffusion-webui/repositories
 
@@ -39,10 +39,10 @@ COPY models/groundingdino_swint_ogc.pth /stable-diffusion-webui/repositories/sd-
 COPY models/lazymix.safetensors /lazymix.safetensors
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
+    pip install --ignore-installed -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install diskcache xformers open_clip_torch
+    pip install --ignore-installed diskcache xformers open_clip_torch
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
