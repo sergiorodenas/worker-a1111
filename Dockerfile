@@ -5,6 +5,8 @@ COPY builder/clone.sh /clone.sh
 RUN . /clone.sh sd-webui-segment-anything https://github.com/continue-revolution/sd-webui-segment-anything.git d0492ac6d586d32c04ccaeb7e720d023e60bd122
 RUN . /clone.sh sd-webui-replacer https://github.com/light-and-ray/sd-webui-replacer.git c7f510c6917dfa93e3b2a7a441f4aecdfe6d047b
 RUN . /clone.sh stable-diffusion-stability-ai https://github.com/Stability-AI/stablediffusion.git cf1d67a6fd5ea1aa600c4df58e5b47da45f6bdbf
+RUN . /clone.sh generative-models https://github.com/Stability-AI/generative-models.git 45c443b316737a4ab6e40413d7794a7f5657c19f
+RUN . /clone.sh k-diffusion https://github.com/crowsonkb/k-diffusion.git 045515774882014cc14c1ba2668ab5bad9cbf7c0
 
 FROM python:3.10.9-slim
 
