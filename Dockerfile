@@ -48,6 +48,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --force-reinstall --no-deps --pre xformers
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
+RUN cd /stable-diffusion-webui/repositories/generative-models && pip install -e .
 RUN cd /stable-diffusion-webui && python cache.py --xformers --use-cpu=all --ckpt /lazymix.safetensors
 
 COPY config.json /stable-diffusion-webui/config.json
