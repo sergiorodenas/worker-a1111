@@ -35,7 +35,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY --from=download /repositories /stable-diffusion-webui/repositories
 
 COPY models/sam_hq_vit_l.pth /stable-diffusion-webui/repositories/sd-webui-segment-anything/models/sam/sam_hq_vit_l.pth
-COPY models/groundingdino_swint_ogc.pth /stable-diffusion-webui/repositories/sd-webui-segment-anything/models/grounding-dino/groundingdino_swint_ogc.pth
+#COPY models/groundingdino_swint_ogc.pth /stable-diffusion-webui/repositories/sd-webui-segment-anything/models/grounding-dino/groundingdino_swint_ogc.pth
 COPY models/lazymix.safetensors /lazymix.safetensors
 
 RUN --mount=type=cache,target=/root/.cache/pip \
