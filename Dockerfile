@@ -22,7 +22,7 @@ RUN apt-get update && \
     apt-get autoremove -y && rm -rf /var/lib/apt/lists/* && apt-get clean -y
 
 RUN --mount=type=cache,target=/cache --mount=type=cache,target=/root/.cache/pip \
-    pip install torch torchvision torchaudio open_clip_torch --index-url https://download.pytorch.org/whl/cu118
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
@@ -40,7 +40,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r /stable-diffusion-webui/repositories/sd-webui-segment-anything/requirements.txt
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install diskcache xformers
+    pip install diskcache xformers open_clip_torch
 
 COPY builder/cache.py /stable-diffusion-webui/cache.py
 RUN cd /stable-diffusion-webui && python cache.py --use-cpu=all --ckpt /lazymix.safetensors
